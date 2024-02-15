@@ -8,4 +8,12 @@ public class HelloMyNameTest {
     public void testHelloMyName() {
         System.out.println("Hello from Roman");
     }
+
+    @Test
+    public void testGetRequest() {
+        Response response = RestAssured
+                .get("https://playground.learnqa.ru/api/get_text")
+                .andReturn();
+        response.prettyPrint();
+    }
 }
