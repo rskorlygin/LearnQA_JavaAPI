@@ -4,6 +4,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,5 +73,46 @@ public class HelloMyNameTest {
             }
         }
         System.out.println(redirectSum);
+    }
+
+    @Test
+    public void testEx8Token() throws InterruptedException {
+        JsonPath response = RestAssured
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
+
+        String answerToken = response.get("token");
+        int answerTime = response.get("seconds");
+
+        Map<String, String> token = new HashMap<>();
+        token.put("token", answerToken);
+
+        JsonPath response2 = RestAssured
+                .given()
+                .queryParams(token)
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
+
+        if (response2.get("status").equals("Job is NOT ready")) {
+            response2.prettyPrint();
+        }
+        else {
+            System.out.println("Invalidate status token!");
+        }
+
+        Thread.sleep((answerTime* 1000L));
+
+        JsonPath response3 = RestAssured
+                .given()
+                .queryParams(token)
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
+
+        if ((response3.get("status").equals("Job is ready")) && (response3.get("result"))!=null) {
+            response3.prettyPrint();
+        }
+        else {
+            System.out.println("Invalidate status token!");
+        }
     }
 }
