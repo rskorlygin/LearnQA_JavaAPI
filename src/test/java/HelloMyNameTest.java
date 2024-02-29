@@ -45,4 +45,32 @@ public class HelloMyNameTest {
         String locationHeaders = response.getHeader("X-Host");
         System.out.println(locationHeaders);
     }
+
+    @Test
+    public void testEx7LongRedirects() {
+        int redirectSum = 0;
+
+        for (int i =0; i<100; i++) {
+            Response response = RestAssured
+                    .given()
+                    .redirects()
+                    .follow(true)
+                    .when()
+                    .get("https://playground.learnqa.ru/api/long_redirect")
+                    .andReturn();
+
+            String locationHeaders = response.getHeader("X-Host");
+            System.out.println(locationHeaders);
+            int statusCode = response.getStatusCode();
+            System.out.println(statusCode);
+            if (statusCode==200) {
+                redirectSum++;
+                break;
+            }
+            else {
+                redirectSum++;
+            }
+        }
+        System.out.println(redirectSum);
+    }
 }
