@@ -1,12 +1,17 @@
+import groovy.json.JsonOutput;
 import io.restassured.RestAssured;
 import io.restassured.http.Cookie;
 import io.restassured.http.Headers;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.sql.Timestamp;
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HelloMyNameTest {
 
@@ -155,5 +160,11 @@ public class HelloMyNameTest {
             }
             i++;
         }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Ab ovo usque ad mala", "Test text"})
+    public void testEx10StringLength(String text) {
+        assertTrue(text.length() > 15, "The text is shorter than 15 characters");
     }
 }
