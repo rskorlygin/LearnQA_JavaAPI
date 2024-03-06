@@ -177,4 +177,48 @@ public class HelloMyNameTest {
 
         assertEquals(response.getCookie("HomeWork"), "hw_value", "HomeWork cookie not expected result");
     }
+
+    @Test
+    public void testEx12AssertHeader() {
+        Response response = RestAssured
+                .given()
+                .get("https://playground.learnqa.ru/api/homework_header");
+
+        assertEquals(
+                response.getHeader("Date").substring(0, 5),    // дата меняется в зависимости от времени запуска тестов, поэтому была обрезана
+                "Wed, ",
+                "Date header not expected result");
+        assertEquals(
+                response.getHeader("Content-Type"),
+                "application/json",
+                "Content-Type header not expected result");
+        assertEquals(
+                response.getHeader("Content-Length"),
+                "15",
+                "Content-Length header not expected result");
+        assertEquals(
+                response.getHeader("Connection"),
+                "keep-alive",
+                "Connection header not expected result");
+        assertEquals(
+                response.getHeader("Keep-Alive"),
+                "timeout=10",
+                "Keep-Alive header not expected result");
+        assertEquals(
+                response.getHeader("Server"),
+                "Apache",
+                "Server header not expected result");
+        assertEquals(
+                response.getHeader("x-secret-homework-header"),
+                "Some secret value",
+                "X-secret-homework-header header not expected result");
+        assertEquals(
+                response.getHeader("Cache-Control"),
+                "max-age=0",
+                "Cache-Control header not expected result");
+        assertEquals(
+                response.getHeader("Expires").substring(0, 5),    // дата меняется в зависимости от времени запуска тестов, поэтому была обрезана
+                "Wed, ",
+                "Expires header not expected result");
+    }
 }
