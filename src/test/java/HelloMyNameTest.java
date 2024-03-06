@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.sql.Timestamp;
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HelloMyNameTest {
@@ -166,5 +167,14 @@ public class HelloMyNameTest {
     @ValueSource(strings = {"Ab ovo usque ad mala", "Test text"})
     public void testEx10StringLength(String text) {
         assertTrue(text.length() > 15, "The text is shorter than 15 characters");
+    }
+
+    @Test
+    public void testEx11AssertCookie() {
+        Response response = RestAssured
+                .given()
+                .get("https://playground.learnqa.ru/api/homework_cookie");
+
+        assertEquals(response.getCookie("HomeWork"), "hw_value", "HomeWork cookie not expected result");
     }
 }
