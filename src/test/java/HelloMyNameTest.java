@@ -6,6 +6,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.sql.Timestamp;
@@ -220,5 +221,37 @@ public class HelloMyNameTest {
                 response.getHeader("Expires").substring(0, 5),    // дата меняется в зависимости от времени запуска тестов, поэтому была обрезана
                 "Wed, ",
                 "Expires header not expected result");
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "0, Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30",
+            "1, Mozilla/5.0 (iPad; CPU OS 13_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/91.0.4472.77 Mobile/15E148 Safari/604.1",
+            "2, Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+            "3, Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36 Edg/91.0.100.0",
+            "4, Mozilla/5.0 (iPad; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"})
+    public void testEx13UserAgent(int data, String name) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("user-agent", name);
+
+        String[] dataResult = new String[] {
+                "platform: Mobile, browser: No, device: Android",
+                "platform: Mobile, browser: Chrome, device: iOS",
+                "platform: Googlebot, browser: Unknown, device: Unknown",
+                "platform: Web, browser: Chrome, device: No",
+                "platform: Mobile, browser: No, device: iPhone"};
+
+        JsonPath response = RestAssured
+                .given()
+                .headers(headers)
+                .get("https://playground.learnqa.ru/ajax/api/user_agent_check")
+                .jsonPath();
+
+        assertEquals(
+                dataResult[data],
+                ("platform: " + response.getString("platform") + ", " +
+                 "browser: " + response.getString("browser") + ", " +
+                 "device: " + response.getString("device")),
+                "Incorrect result");
     }
 }
