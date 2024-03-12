@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
@@ -10,10 +12,12 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+@Feature("Get data")
 public class UserGetTest extends BaseTestCase {
 
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
+    @Description("This test not successfully get user data without auth")
     @Test
     public void testGetUserDataNotAuth() {
         Response response = RestAssured
@@ -26,6 +30,7 @@ public class UserGetTest extends BaseTestCase {
         Assertions.assertJsonNotHasKey(response, "lastName");
     }
 
+    @Description("This test successfully get user data")
     @Test
     public void testGetUserDetailsAuthAsSameUser() {
         Map<String, String> authData = new HashMap<>();
@@ -49,6 +54,7 @@ public class UserGetTest extends BaseTestCase {
         Assertions.assertJsonHasFields(response2, expectedFields);
     }
 
+    @Description("This test not successfully get user data with auth another user")
     @Test
     public void testGetUserDetailsAuthAsSameAuthAnotherUser() {
         Map<String, String> authData = new HashMap<>();

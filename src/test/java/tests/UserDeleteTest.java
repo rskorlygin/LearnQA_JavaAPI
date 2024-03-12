@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -12,10 +14,12 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+@Feature("Delete")
 public class UserDeleteTest extends BaseTestCase {
 
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
+    @Description("This test not successfully delete user")
     @Test
     public void testDeleteJustCreatedUser() {
 
@@ -49,6 +53,7 @@ public class UserDeleteTest extends BaseTestCase {
         Assertions.asserJsonByName(responseUserData, "id", 2);
     }
 
+    @Description("This test successfully delete user")
     @Test
     public void testDeleteUser() {
 
@@ -93,6 +98,7 @@ public class UserDeleteTest extends BaseTestCase {
         Assertions.assertResponseTextEquals(responseUserData, "User not found");
     }
 
+    @Description("This test not successfully delete user under auth another user")
     @Test
     public void testDeleteJustAuthAnotherUser() {
 

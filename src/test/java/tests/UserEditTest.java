@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -13,10 +15,12 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+@Feature("Edit")
 public class UserEditTest extends BaseTestCase {
 
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
+    @Description("This test successfully edit user")
     @Test
     public void testEditJustCreatedTest() {
 
@@ -66,6 +70,7 @@ public class UserEditTest extends BaseTestCase {
         Assertions.asserJsonByName(responseUserData, "firstName", newName);
     }
 
+    @Description("This test not successfully edit user without auth")
     @Test
     public void testEditNotAuth() {
 
@@ -87,6 +92,7 @@ public class UserEditTest extends BaseTestCase {
         Assertions.asserJsonByName(response, "username", "Vitaliy");
     }
 
+    @Description("This test not successfully edit user under auth another user")
     @Test
     public void testEditJustCreatedAnotherAuthUser() {
 
@@ -130,6 +136,7 @@ public class UserEditTest extends BaseTestCase {
         Assertions.asserJsonByName(responseUserData, "username", "Lana");
     }
 
+    @Description("This test not successfully edit user to incorrect email")
     @Test
     public void testEditIncorrectEmailJustCreated() {
 
@@ -179,6 +186,7 @@ public class UserEditTest extends BaseTestCase {
         Assertions.asserJsonByNameNot(responseUserData, "email", newEmail);
     }
 
+    @Description("This test not successfully edit user to short name")
     @Test
     public void testEditShortFirstNameJustCreated() {
 

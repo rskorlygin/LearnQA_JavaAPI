@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
@@ -14,10 +16,12 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+@Feature("Created")
 public class UserRegisterTest extends BaseTestCase {
 
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
+    @Description("This test not successfully create user with existing email")
     @Test
     public void testCreateUserWithExistingEmail() {
         String email = "vinkotov@example.com";
@@ -36,6 +40,7 @@ public class UserRegisterTest extends BaseTestCase {
         Assertions.assertResponseTextEquals(response, "Users with email '" + email + "' already exists");
     }
 
+    @Description("This test successfully create user")
     @Test
     public void testCreateUserSuccessfully() {
         String email = DataGenerator.getRandomEmail();
@@ -52,6 +57,7 @@ public class UserRegisterTest extends BaseTestCase {
         Assertions.assertJsonHasKey(response, "id");
     }
 
+    @Description("This test not successfully create user with incorrect email")
     @Test
     public void testCreateUserIncorrectEmail() {
         Map<String, String> userData = new HashMap<>();
@@ -68,6 +74,7 @@ public class UserRegisterTest extends BaseTestCase {
         Assertions.assertJsonNotHasKey(response, "id");
     }
 
+    @Description("This test not successfully create user with empty fields")
     @ParameterizedTest
     @ValueSource(ints = {0,1,2,3,4})
     public void testCreateUserNoField(int usersData) {
@@ -144,6 +151,7 @@ public class UserRegisterTest extends BaseTestCase {
         }
     }
 
+    @Description("This test not successfully create user with short name")
     @Test
     public void testCreateUserShortUsername() {
         Map<String, String> userData = new HashMap<>();
@@ -160,6 +168,7 @@ public class UserRegisterTest extends BaseTestCase {
         Assertions.assertJsonNotHasKey(response, "id");
     }
 
+    @Description("This test not successfully create user with long name")
     @Test
     public void testCreateUserLongUsername() {
         Map<String, String> userData = new HashMap<>();
